@@ -7,7 +7,7 @@ stages:
   - publish
 
 
-image: 'greyrook/cde-dev-py36:05076344795a6bfb70d4cc11af8596476487b873'
+image: 'greyrook/cde-dev-py36:6e1eef7dc9269d32d1e3b0c389050e65f36111bc'
 
 
 before_script:
