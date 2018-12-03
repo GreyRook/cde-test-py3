@@ -34,3 +34,7 @@ pytest-python3.6:
 # pytest-python3.7:
 #   <<: *test_def
 #   image: 'greyrook/cde-dev-py37:'
+pycodestyle:
+  stage: test
+  script:
+    - pipenv run pycodestyle
