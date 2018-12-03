@@ -31,6 +31,6 @@ pytest-python3.6:
      - htmlcov/
 
 
-pytest-python3.7:
-  <<: *test_def
-  image: 'greyrook/cde-dev-py37:'
+# pytest-python3.7:
+#   <<: *test_def
+#   image: 'greyrook/cde-dev-py37:'
