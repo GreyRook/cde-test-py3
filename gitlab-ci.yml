@@ -8,3 +8,29 @@ stages:
 
 
 image: 'greyrook/cde-dev-py36:05076344795a6bfb70d4cc11af8596476487b873'
+
+
+before_script:
+  - pipenv --python `which python3`
+  # pipenv and pip 18.1 are not compatible:
+  # avoid https://github.com/pypa/pipenv/issues/2924
+  - pipenv run pip install pip==18.0
+  - pipenv install --dev
+  - pipenv run pip install -e .
+.test_template: &test_def
+  script:
+  - pipenv run py.test --cov ${PYTHON_MODULE} --cov tests --cov-report=html --cov-report=term tests
+
+
+pytest-python3.6:
+  <<: *test_def
+  coverage: '/\d+\%\s*$/'
+  artifacts:
+    name: "coverage"
+    paths:
+     - htmlcov/
+
+
+pytest-python3.7:
+  <<: *test_def
+  image: 'greyrook/cde-dev-py37:'
