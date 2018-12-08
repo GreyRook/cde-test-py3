@@ -44,5 +44,27 @@ linting:
     - pipenv run mypy --no-incremental --ignore-missing-imports ${PYTHON_MODULE}
 
 
+docker:
+  stage: dist
+  before_script:
+    - mkdir -p ~/.docker
+    - echo "$DOCKER_AUTH_CONFIG" > ~/.docker/config.json
   script:
-    - pipenv run pylint --errors-only ${PYTHON_MODULE}
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -t $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME} .
+
+    - DOCKER_BACKGROUND=$(docker run -d --name ci-smoke-test $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA)
+    - 'echo "Running in the background, container: $DOCKER_BACKGROUND"'
+    - |
+      for i in `seq 1 200`; do
+        if docker inspect --format '{{ .State.Health.Status }}' $DOCKER_BACKGROUND | grep healthy; then
+          docker rm -f $DOCKER_BACKGROUND
+          exit 0
+        fi
+        sleep 0.1
+      done
+
+      docker rm -f $DOCKER_BACKGROUND
+      exit 1
+
+    - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA}
+    - docker push $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME}
