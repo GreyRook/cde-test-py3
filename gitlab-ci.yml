@@ -3,8 +3,6 @@ stages:
   - test
   - build
   - dist
-  - container-check
-  - publish
 
 
 image: 'greyrook/cde-dev-py36:6e1eef7dc9269d32d1e3b0c389050e65f36111bc'
