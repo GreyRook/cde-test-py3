@@ -38,7 +38,7 @@ linting:
   stage: test
   script:
     - pipenv run pycodestyle ${PYTHON_MODULE} tests/
-    - pipenv run pylint --errors-only ${PYTHON_MODULE}
+    - pipenv run pylint ${PYTHON_MODULE}
     - pipenv run mypy --no-incremental --ignore-missing-imports ${PYTHON_MODULE}
 
 
