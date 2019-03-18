@@ -69,3 +69,7 @@ docker:
 
     - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA}
     - docker push $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME}
+  except:
+    variables:
+      - $CI_REGISTRY_IMAGE == ""
+
