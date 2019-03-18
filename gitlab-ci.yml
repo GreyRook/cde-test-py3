@@ -5,7 +5,7 @@ stages:
   - dist
 
 
-image: 'greyrook/cde-dev-py36:6e1eef7dc9269d32d1e3b0c389050e65f36111bc'
+image: 'greyrook/cde-dev-py37:a355037c12bd7236957a9ab2e2519ada272aac50'
 
 
 before_script:
@@ -22,16 +22,18 @@ before_script:
 
 pytest-python3.6:
   <<: *test_def
+
+  image: 'greyrook/cde-dev-py36:6e1eef7dc9269d32d1e3b0c389050e65f36111bc'
+
+
+pytest-python3.7:
+  <<: *test_def
+
   coverage: '/\d+\%\s*$/'
   artifacts:
     name: "coverage"
     paths:
      - htmlcov/
-
-
-# pytest-python3.7:
-#   <<: *test_def
-#   image: 'greyrook/cde-dev-py37:'
 
 
 linting:
