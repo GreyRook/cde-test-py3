@@ -52,22 +52,24 @@ docker:
   script:
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -t $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME} .
 
-    - DOCKER_BG=$(docker run -d --name ci-smoke-test $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA)
-    - 'echo "Running in the background, container: $DOCKER_BG"'
-    - |
-      bash << EOF
-      for i in `seq 1 200`; do
-        STATUS=$(docker inspect --format '{{ .State.Health.Status }}' $DOCKER_BG)
-        if [ "$STATUS" == "healthy" ]; then
-          docker rm -f $DOCKER_BG
-          exit 0
-        fi
-        sleep 0.1
-      done
+    ## smoke test for docker container
+    ## TODO not working reliable
+    # - DOCKER_BG=$(docker run -d --name ci-smoke-test $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA)
+    # - 'echo "Running in the background, container: $DOCKER_BG"'
+    # - |
+    #   bash << EOF
+    #   for i in `seq 1 200`; do
+    #     STATUS=$(docker inspect --format '{{ .State.Health.Status }}' $DOCKER_BG)
+    #     if [ "$STATUS" == "healthy" ]; then
+    #       docker rm -f $DOCKER_BG
+    #       exit 0
+    #     fi
+    #     sleep 0.1
+    #   done
 
-      docker rm -f $DOCKER_BG
-      exit 1
-      EOF
+    #   docker rm -f $DOCKER_BG
+    #   exit 1
+    #   EOF
 
     - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA}
     - docker push $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME}
