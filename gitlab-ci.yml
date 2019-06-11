@@ -23,8 +23,15 @@ test-project:
   stage: test-project
   before_script: []
   script:
-    # the project must contain a Pilefile and a Pilefile.lock
-    - ls Pipefile Pilefile.lock
+    # ensure default files are available
+    - ls Pipfile Pipfile.lock setup.py
+    - grep "pytest " Pipfile
+    - grep pytest-cov Pipfile
+    - grep mypy Pipfile
+    - grep pylint Pipfile
+    - [ -d "tests" ]
+    - [ -d "$PYTHON_MODULE" ]
+    - '[ "$CI_REGISTRY_IMAGE" == "" ] || [ -f Dockerfile ]'
 
 
 .test_template: &test_def
