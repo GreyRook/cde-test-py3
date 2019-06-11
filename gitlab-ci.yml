@@ -29,8 +29,8 @@ test-project:
     - grep pytest-cov Pipfile
     - grep mypy Pipfile
     - grep pylint Pipfile
-    - [ -d "tests" ]
-    - [ -d "$PYTHON_MODULE" ]
+    - '[ -d "tests" ]'
+    - '[ -d "$PYTHON_MODULE" ]'
     - '[ "$CI_REGISTRY_IMAGE" == "" ] || [ -f Dockerfile ]'
 
 
