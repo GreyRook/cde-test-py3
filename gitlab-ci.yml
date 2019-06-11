@@ -15,6 +15,18 @@ before_script:
   - pipenv run pip install pip==18.0
   - pipenv install --dev
   - pipenv run pip install -e .
+
+
+# ensure project has follows basic patterns to avoid
+# less readble error messages later
+test-project:
+  stage: test-project
+  before_script: []
+  script:
+    # the project must contain a Pilefile and a Pilefile.lock
+    - ls Pipefile Pilefile.lock
+
+
 .test_template: &test_def
   script:
   - pipenv run py.test --cov ${PYTHON_MODULE} --cov tests --cov-report=html --cov-report=term tests
@@ -39,9 +51,46 @@ pytest-python3.7:
 linting:
   stage: test
   script:
-    - pipenv run pycodestyle ${PYTHON_MODULE} tests/
-    - pipenv run pylint ${PYTHON_MODULE}
-    - pipenv run mypy --no-incremental --ignore-missing-imports ${PYTHON_MODULE}
+    - |
+      pipenv run pycodestyle ${PYTHON_MODULE} tests/
+      RES_CODESTYLE=$?
+      pipenv run pylint ${PYTHON_MODULE}
+      RES_PYLINT=$?
+      pipenv run mypy --no-incremental --ignore-missing-imports ${PYTHON_MODULE}
+      RES_MYPY=$?
+
+      echo "== Summary =="
+
+
+      if [ "$RES_CODESTYLE" == "0" ]; then
+          echo -n "✔"
+      else
+          echo -n "✖"
+      fi
+      echo " pycodestyle"
+
+
+      if [ "$RES_PYLINT" == "0" ]; then
+          echo -n "✔"
+      else
+          echo -n "✖"
+      fi
+      echo " pylint"
+
+
+
+      if [ "$RES_MYPY" == "0" ]; then
+          echo -n "✔"
+      else
+          echo -n "✖"
+      fi
+      echo " mypy"
+
+
+      if [ "$RES_CODESTYLE" != "0" ] | [ "$RES_PYLINT" != "0" ] | [ "$RES_MYPY" != "0" ]; then
+          echo "Not all checks passed"
+          exit 1
+      fi
 
 
 docker:
@@ -76,4 +125,3 @@ docker:
   except:
     variables:
       - $CI_REGISTRY_IMAGE == ""
-
