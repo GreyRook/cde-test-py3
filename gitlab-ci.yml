@@ -61,6 +61,7 @@ linting:
   stage: test
   script:
     - |
+      bash << EOF
       pipenv run pycodestyle ${PYTHON_MODULE} tests/
       RES_CODESTYLE=$?
       pipenv run pylint ${PYTHON_MODULE}
@@ -100,6 +101,7 @@ linting:
           echo "Not all checks passed"
           exit 1
       fi
+      EOF
 
 
 docker:
