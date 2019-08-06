@@ -60,49 +60,8 @@ pytest-python3.7:
 linting:
   stage: test
   script:
-    - |
-      bash << EOF
-      echo "== pycodestyle =="
-      pipenv run pycodestyle \${PYTHON_MODULE} tests/
-      RES_CODESTYLE=\$?
-
-      echo "== pylint =="
-      pipenv run pylint \${PYTHON_MODULE}
-      RES_PYLINT=\$?
-
-      echo "== mypy =="
-      pipenv run mypy --no-incremental --ignore-missing-imports \${PYTHON_MODULE}
-      RES_MYPY=\$?
-
-      echo "== Summary =="
-
-      if [ "\$RES_CODESTYLE" == "0" ]; then
-          echo -n "✔"
-      else
-          echo -n "✖ (code: \$RES_CODESTYLE)"
-      fi
-      echo " pycodestyle"
-
-      if [ "\$RES_PYLINT" == "0" ]; then
-          echo -n "✔"
-      else
-          echo -n "✖ (code: \$RES_PYLINT)"
-      fi
-      echo " pylint"
-
-
-      if [ "\$RES_MYPY" == "0" ]; then
-          echo -n "✔"
-      else
-          echo -n "✖ (code: \$RES_MYPY)"
-      fi
-      echo " mypy"
-
-      if [ "\$RES_CODESTYLE" != "0" ] | [ "\$RES_PYLINT" != "0" ] | [ "\$RES_MYPY" != "0" ]; then
-          echo "Not all checks passed"
-          exit 1
-      fi
-      EOF
+    - pipenv run pip install cpa==0.0.1
+    - pipenv run create-python-app test
 
 
 docker:
