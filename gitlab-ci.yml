@@ -60,7 +60,7 @@ pytest-python3.7:
 linting:
   stage: test
   script:
-    - pipenv run pip install cpa==0.1.0
+    - pipenv run pip install cpa==0.2.0
     - pipenv run create-python-app test
 
 
