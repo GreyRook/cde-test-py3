@@ -1,0 +1,18 @@
+stages:
+  - test-project
+  - test
+  - build
+  - dist
+
+docker:
+  stage: dist
+  before_script:
+    - mkdir -p ~/.docker
+    - echo "$DOCKER_AUTH_CONFIG" > ~/.docker/config.json
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -t $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME} .
+    - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA}
+    - docker push $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME}
+  except:
+    variables:
+      - $CI_REGISTRY_IMAGE == ""

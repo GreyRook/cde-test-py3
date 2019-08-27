@@ -1,8 +1,5 @@
-stages:
-  - test-project
-  - test
-  - build
-  - dist
+include:
+  - https://gitlab.com/GreyRook/cde/gitlab-ci-templates/raw/0e3fd3b7c245a569ef40899cb5d3265fbf25435b/gitlab-ci-base.yml
 
 
 image: 'greyrook/cde-dev-py37:a355037c12bd7236957a9ab2e2519ada272aac50'
@@ -62,37 +59,3 @@ linting:
   script:
     - pipenv run pip install cpa==0.3.0
     - pipenv run create-python-app test
-
-
-docker:
-  stage: dist
-  before_script:
-    - mkdir -p ~/.docker
-    - echo "$DOCKER_AUTH_CONFIG" > ~/.docker/config.json
-  script:
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -t $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME} .
-
-    ## smoke test for docker container
-    ## TODO not working reliable
-    # - DOCKER_BG=$(docker run -d --name ci-smoke-test $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA)
-    # - 'echo "Running in the background, container: $DOCKER_BG"'
-    # - |
-    #   bash << EOF
-    #   for i in `seq 1 200`; do
-    #     STATUS=$(docker inspect --format '{{ .State.Health.Status }}' $DOCKER_BG)
-    #     if [ "$STATUS" == "healthy" ]; then
-    #       docker rm -f $DOCKER_BG
-    #       exit 0
-    #     fi
-    #     sleep 0.1
-    #   done
-
-    #   docker rm -f $DOCKER_BG
-    #   exit 1
-    #   EOF
-
-    - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA}
-    - docker push $CI_REGISTRY_IMAGE:latest-${CI_COMMIT_REF_NAME}
-  except:
-    variables:
-      - $CI_REGISTRY_IMAGE == ""

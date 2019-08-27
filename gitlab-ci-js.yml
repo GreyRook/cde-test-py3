@@ -1,0 +1,17 @@
+include:
+  - https://gitlab.com/GreyRook/cde/gitlab-ci-templates/raw/0e3fd3b7c245a569ef40899cb5d3265fbf25435b/gitlab-ci-base.yml
+
+
+image: greyrook/cde-dev-js:8e3a9103160e390efcd135faa0a0122aed7088c7
+
+
+prettier:
+  stage: test
+  script:
+    - yarn run lint-prettier
+
+
+eslint:
+  stage: test
+  script:
+    - yarn run lint
