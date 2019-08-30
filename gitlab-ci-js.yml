@@ -14,4 +14,12 @@ prettier:
 eslint:
   stage: test
   script:
+    - yarn add eslint-plugin-prettier
     - yarn run lint
+
+
+test:
+  stage: test
+  script:
+    - yarn
+    - yarn run test
