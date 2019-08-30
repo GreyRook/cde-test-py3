@@ -1,5 +1,5 @@
 include:
-  - https://gitlab.com/GreyRook/cde/gitlab-ci-templates/raw/0e3fd3b7c245a569ef40899cb5d3265fbf25435b/gitlab-ci-base.yml
+  - https://gitlab.com/GreyRook/cde/gitlab-ci-templates/raw/eea13b881d15abb97e2e1aac1d67f6f36fecf785/gitlab-ci-base.yml
 
 
 image: 'greyrook/cde-dev-py37:a355037c12bd7236957a9ab2e2519ada272aac50'
